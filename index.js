@@ -121,6 +121,23 @@ GoogleContacts.prototype.getContacts = function (params, cb, contacts) {
 
 // grab a property off an entry
 function val(entry, name, attr, delimiter) {
+  if( attr.indexOf("-") > -1 ) {
+    var attrs = attr.split("-");
+
+    var newEntryKey = attrs[0];
+    attrs.shift();
+
+    if(!entry[newEntryKey]) {
+      return ;
+    } else {
+      var newEntry = entry[newEntryKey];
+      if(Array.isArray(newEntry)) {
+        newEntry = newEntry[0];
+      }
+      return  val(newEntry, name, attrs.join("-"), delimiter);
+    }
+  }
+  if(entry[attr]) return entry[attr];
   if (!entry[name]) return;
   if (!Array.isArray(entry[name])) {
     return entry[name][attr];
@@ -169,6 +186,7 @@ var processors = {
       "email" : "gd$email",
       "phoneNumber": "gd$phoneNumber",
       "postalAddress": "gd$postalAddress",
+      "organization": "gd$organization"
     }
 
     var prop_attr = {
@@ -176,7 +194,9 @@ var processors = {
       "email" : "address",
       "phoneNumber" : "$t",
       "postalAddress" : "$t",
+      "organization": "gd$organization-gd$orgName-$t"
     }
+
 
     // generating a collection of functions
     var objector = { };
@@ -189,6 +209,7 @@ var processors = {
       _.each(props, function(prop) {
         obj[prop] = objector[prop](entry);
       });
+
       contacts.push(obj);
     } 
   }
