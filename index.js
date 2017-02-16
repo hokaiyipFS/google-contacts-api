@@ -274,7 +274,6 @@ GoogleContacts.prototype.refreshAccessToken = function (refreshToken, cb) {
       }
       try {
         data = JSON.parse(data);
-        cdata = JSON.parse(data);
         cb(null, data.access_token);
       }
       catch (err) {
