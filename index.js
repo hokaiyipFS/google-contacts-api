@@ -167,13 +167,15 @@ var processors = {
     var prop_names = {
       "name" : "title",
       "email" : "gd$email",
-      "phoneNumber": "gd$phoneNumber"
+      "phoneNumber": "gd$phoneNumber",
+      "postalAddress": "gd$postalAddress",
     }
 
     var prop_attr = {
       "name" : "$t",
       "email" : "address",
-      "phoneNumber" : "$t"
+      "phoneNumber" : "$t",
+      "postalAddress" : "$t",
     }
 
     // generating a collection of functions
@@ -272,6 +274,7 @@ GoogleContacts.prototype.refreshAccessToken = function (refreshToken, cb) {
       }
       try {
         data = JSON.parse(data);
+        cdata = JSON.parse(data);
         cb(null, data.access_token);
       }
       catch (err) {
